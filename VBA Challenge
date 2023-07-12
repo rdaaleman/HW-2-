@@ -1,0 +1,81 @@
+Sub vbachallenge()
+    For Each ws In Worksheets
+        Dim WorkSheetName As String
+        Dim LastRow As Long
+        Dim YearlyChange As Double
+        Dim OpeningPrice As Double
+        Dim ClosingPrice As Double
+        Dim Total_volume As Double
+        Dim MaxIncrease As Double
+        Dim MaxIncreaseTicker As String
+        Dim MaxDecrease As Double
+        Dim MaxDecreaseTicker As String
+        Dim MaxVolume As Double
+        Dim MaxVolumeTicker As String
+        Dim opening_row As Long
+        Dim i As Long
+        Dim r As Long
+        Dim sum As Long
+        
+        LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        WorkSheetName = ws.Name
+        opening_row = 2
+        r = 2
+        Total_volume = 0
+              
+        
+        For i = 2 To LastRow
+        
+        Total_volume = Total_volume + ws.Cells(i, 7).Value
+        
+            If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
+                ClosingPrice = ws.Cells(i, 6).Value
+                OpeningPrice = ws.Cells(opening_row, 3).Value
+                ws.Cells(r, 10).Value = ws.Cells(i, 1).Value
+                ws.Cells(r, 11).Value = ClosingPrice - OpeningPrice
+                ws.Cells(r, 12).Value = ((ws.Cells(r, 11).Value) / ClosingPrice)
+                ws.Cells(r, 12).NumberFormat = "0.00%"
+                ws.Cells(r, 13).Value = Total_volume
+                If ws.Cells(r, 11).Value > 0 Then
+                ws.Cells(r, 11).Interior.ColorIndex = 4
+                ElseIf ws.Cells(r, 11).Value <= 0 Then
+                ws.Cells(r, 11).Interior.ColorIndex = 3
+            End If
+                r = r + 1
+                opening_row = i + 1
+                Total_volume = 0
+            End If
+            
+        Next i
+            MaxIncrease = 0
+            MaxDecrease = 0
+            MaxVolume = 0
+            For i = 2 To LastRow
+            
+            If ws.Cells(i, "L").Value > MaxIncrease Then
+                MaxIncrease = ws.Cells(i, "L").Value
+                MaxIncreaseTicker = ws.Cells(i, "J").Value
+            End If
+            
+            If ws.Cells(i, "L").Value < MaxDecrease Then
+                MaxDecrease = ws.Cells(i, "L").Value
+                MaxDecreaseTicker = ws.Cells(i, "J").Value
+            End If
+            
+            If ws.Cells(i, "M").Value > MaxVolume Then
+                MaxVolume = ws.Cells(i, "M").Value
+                MaxVolumeTicker = ws.Cells(i, "J").Value
+            End If
+            
+    Next i
+            ws.Range("R2").Value = MaxIncreaseTicker
+            ws.Range("S2").Value = MaxIncrease
+            ws.Range("S2").NumberFormat = "0.00%"
+            ws.Range("R3").Value = MaxDecreaseTicker
+            ws.Range("S3").Value = MaxDecrease
+            ws.Range("S3").NumberFormat = "0.00%"
+            ws.Range("R4").Value = MaxVolumeTicker
+            ws.Range("S4").Value = MaxVolume
+    Next ws
+End Sub
+
