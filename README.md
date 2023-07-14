@@ -14,7 +14,5 @@ Next i
             ws.Range("R4").Value = MaxVolumeTicker
             ws.Range("S4").Value = MaxVolume
     Next ws
-    I received help from my tutor Simon 
+    I received help from my tutor Simon
 
-
-sldsafjlk
